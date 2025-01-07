@@ -43,3 +43,41 @@ Function GetSelectedFilePaths(initialFolderPath As String, dialogTitle As String
 
 End Function
 
+Private Function WriteStringToTexFile(text As String, filePath As String) As Boolean
+    On Error GoTo ErrorHandler ' Enable error handling
+
+    Dim fileNumber As Integer
+    fileNumber = FreeFile ' Get a free file number
+
+    ' Open the file for output
+    Open filePath For Output As #fileNumber
+    Print #fileNumber, text
+    Close #fileNumber
+    
+    WriteStringToTexFile = True ' Indicate success
+    Exit Function
+
+ErrorHandler:
+    WriteStringToTexFile = False ' Indicate failure
+    If fileNumber <> 0 Then Close #fileNumber ' Ensure the file is closed if an error occurred
+End Function
+
+Private Function ReadTextFile(filePath As String) As String
+    On Error GoTo ErrorHandler ' Enable error handling
+
+    Dim text As String
+    Dim fileNumber As Integer
+    fileNumber = FreeFile ' Get a free file number
+
+    ' Open the file for input
+    Open filePath For Input As #fileNumber
+    text = Input$(LOF(fileNumber), fileNumber) ' Read the entire file
+    Close #fileNumber
+    
+    ReadTextFile = text ' Return the read text
+    Exit Function
+
+ErrorHandler:
+    ReadTextFile = "" ' Return an empty string in case of an error
+    If fileNumber <> 0 Then Close #fileNumber ' Ensure the file is closed if an error occurred
+End Function
