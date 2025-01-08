@@ -68,3 +68,60 @@ ErrorHandler:
     MsgBox "An error occurred: " & Err.Description, vbCritical
     Resume CleanUp
 End Function
+
+Function ExtractTextFromPdfUsingAcrobatAcroHiliteList(filePath As String) As String
+    Dim AcroApp As Object
+    Dim AcroDoc As Object
+    Dim AcroPage As Object
+    Dim AcroHiliteList As Object
+    Dim AcroTextSelect As Object
+    Dim pageNumber As Integer
+    Dim pageText As String
+    Dim totalText As String
+    Dim totalPages As Integer
+    Dim i As Long
+
+    ' Initialize the total text variable
+    totalText = ""
+
+    ' Create Acrobat Application object
+    Set AcroApp = CreateObject("AcroExch.App")
+    Set AcroDoc = CreateObject("AcroExch.PDDoc")
+
+    ' Open the PDF file
+    If AcroDoc.Open(filePath) Then
+        totalPages = AcroDoc.GetNumPages() ' Get total number of pages in the PDF
+
+        ' Loop through each page and extract text
+        For pageNumber = 0 To totalPages - 1
+            Set AcroPage = AcroDoc.AcquirePage(pageNumber)
+            Set AcroHiliteList = CreateObject("AcroExch.HiliteList")
+            AcroHiliteList.Add 0, 32767 ' Highlight all text on the page
+
+            Set AcroTextSelect = AcroPage.CreatePageHilite(AcroHiliteList)
+            If Not AcroTextSelect Is Nothing Then
+                pageText = ""
+                For i = 0 To AcroTextSelect.GetNumText - 1
+                    pageText = pageText & AcroTextSelect.GetText(i) ' Extract text
+                Next i
+                totalText = totalText & vbCrLf & "Page " & (pageNumber + 1) & ": " & pageText
+            End If
+        Next pageNumber
+
+        ' Close the document
+        AcroDoc.Close
+    Else
+        MsgBox "Failed to open PDF file.", vbExclamation
+    End If
+
+    ' Quit Acrobat
+    AcroApp.Exit
+    Set AcroApp = Nothing
+    Set AcroDoc = Nothing
+    Set AcroPage = Nothing
+    Set AcroHiliteList = Nothing
+    Set AcroTextSelect = Nothing
+
+    ' Return the extracted text
+    ExtractTextFromPdfUsingAcrobatAcroHiliteList = totalText
+End Function
