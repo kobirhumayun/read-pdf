@@ -17,7 +17,9 @@ Private Function CreateDicWithProvidedKeysAndValues( _
         Exit Function
     End If
     
-    Dim dic As New Scripting.dictionary
+    Dim dic As Object
+    Set dic = CreateObject("Scripting.Dictionary")
+    
     Dim i As Long
     Dim tmpKey As String
     
