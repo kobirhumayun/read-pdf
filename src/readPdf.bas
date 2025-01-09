@@ -7,12 +7,11 @@ Function ExtractTextFromPdfUsingAcrobatJsMethod(pdfPath As String) As String
     Dim AcroPDDoc As Object
     Dim jsObj As Object
     Dim extractedText As String
-    Dim numPages As Integer
-    Dim pageNum As Integer
-    Dim numWords As Integer
-    Dim wordNum As Integer
+    Dim numPages As Long
+    Dim pageNum As Long
+    Dim numWords As Long
+    Dim wordNum As Long
     Dim wordText As String
-    Dim sb As Object ' Use StringBuilder for better performance
 
     On Error GoTo ErrorHandler
 
@@ -28,8 +27,8 @@ Function ExtractTextFromPdfUsingAcrobatJsMethod(pdfPath As String) As String
         ' Get the total number of pages
         numPages = jsObj.numPages
 
-        ' Initialize StringBuilder
-        Set sb = CreateObject("System.Text.StringBuilder")
+        ' Initialize the extracted text
+        extractedText = ""
 
         ' Loop through each page in the PDF
         For pageNum = 0 To numPages - 1
@@ -39,10 +38,10 @@ Function ExtractTextFromPdfUsingAcrobatJsMethod(pdfPath As String) As String
             ' Loop through each word on the page
             For wordNum = 0 To numWords - 1
                 wordText = jsObj.getPageNthWord(pageNum, wordNum, False)
-                sb.Append wordText & " "
+                extractedText = extractedText & wordText
             Next wordNum
             ' Add a line break after each page
-            sb.Append vbCrLf & vbCrLf
+            extractedText = extractedText & vbCrLf & vbCrLf
         Next pageNum
 
         ' Close the document and exit Acrobat
@@ -50,7 +49,7 @@ Function ExtractTextFromPdfUsingAcrobatJsMethod(pdfPath As String) As String
         AcroApp.Exit
 
         ' Return the extracted text
-        ExtractTextFromPdfUsingAcrobatJsMethod = sb.ToString
+        ExtractTextFromPdfUsingAcrobatJsMethod = extractedText
     Else
         MsgBox "Failed to open PDF file.", vbExclamation
     End If
@@ -61,7 +60,6 @@ CleanUp:
     If Not AcroApp Is Nothing Then Set AcroApp = Nothing
     If Not AcroPDDoc Is Nothing Then Set AcroPDDoc = Nothing
     If Not jsObj Is Nothing Then Set jsObj = Nothing
-    If Not sb Is Nothing Then Set sb = Nothing
     Exit Function
 
 ErrorHandler:
