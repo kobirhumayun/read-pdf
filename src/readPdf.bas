@@ -73,10 +73,10 @@ Function ExtractTextFromPdfUsingAcrobatAcroHiliteList(filePath As String) As Str
     Dim AcroPage As Object
     Dim AcroHiliteList As Object
     Dim AcroTextSelect As Object
-    Dim pageNumber As Integer
+    Dim pageNumber As Long
     Dim pageText As String
     Dim totalText As String
-    Dim totalPages As Integer
+    Dim totalPages As Long
     Dim i As Long
 
     ' Initialize the total text variable
@@ -102,7 +102,7 @@ Function ExtractTextFromPdfUsingAcrobatAcroHiliteList(filePath As String) As Str
                 For i = 0 To AcroTextSelect.GetNumText - 1
                     pageText = pageText & AcroTextSelect.GetText(i) ' Extract text
                 Next i
-                totalText = totalText & vbCrLf & "Page " & (pageNumber + 1) & ": " & pageText
+                totalText = totalText & vbCrLf & pageText
             End If
         Next pageNumber
 
