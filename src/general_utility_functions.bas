@@ -327,33 +327,29 @@ Private Function sequentiallyRelateTwoArraysAsDictionary(properties_1 As String,
 End Function
 
 Private Function ExcludeElements(arr1 As Variant, arr2 As Variant) As Variant
-    'exclude all the elements from first array which elements exist in second array
-    Dim i As Long
-    Dim j As Long
+    ' Exclude unique elements from arr1 that are present in arr2
+    Dim arr2Dict As Object
+    Dim resultDict As Object
+    Dim item As Variant
 
-    Dim arr2Dictionary As Object
-    Set arr2Dictionary = CreateObject("Scripting.Dictionary")
+    ' Create dictionaries for fast lookups
+    Set arr2Dict = CreateObject("Scripting.Dictionary")
+    Set resultDict = CreateObject("Scripting.Dictionary")
+    
+    ' Build dictionary from arr2 elements
+    For Each item In arr2
+        arr2Dict(item) = Empty
+    Next item
 
-    Dim excludedDictionary As Object
-    Set excludedDictionary = CreateObject("Scripting.Dictionary")
-        
-    ' Loop through the elements of arr2
-    For i = LBound(arr2) To UBound(arr2)
-        
-        arr2Dictionary(arr2(i)) = arr2(i)
-        
-    Next i
-
-    ' Loop through the elements of arr1
-    For j = LBound(arr1) To UBound(arr1)
-
-        If Not arr2Dictionary.Exists(arr1(j)) Then
-            excludedDictionary(arr1(j)) = arr1(j)
+    ' Build result dictionary with unique elements from arr1 not in arr2
+    For Each item In arr1
+        If Not arr2Dict.Exists(item) Then
+            If Not resultDict.Exists(item) Then
+                resultDict(item) = Empty
+            End If
         End If
-        
-    Next j
-        
-    ' Return the result array
-    ExcludeElements = excludedDictionary.keys
-        
+    Next item
+    
+    ' Return the unique keys from result dictionary
+    ExcludeElements = resultDict.Keys
 End Function
