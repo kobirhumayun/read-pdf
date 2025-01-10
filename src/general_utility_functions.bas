@@ -1,14 +1,19 @@
 Attribute VB_Name = "general_utility_functions"
 Option Explicit
 
-Private Function InsertStringAtPosition(originalString As String, insertString As String, position As Integer) As Variant
-    Dim length As Integer
-    length = Len(originalString)
+Private Function InsertStringAtPosition(originalString As String, insertString As String, position As Integer) As String
+    Dim strLength As Long
+    strLength = Len(originalString)
     
-    If length >= position Then
-        InsertStringAtPosition = Left(originalString, length - (position - 1)) & insertString & Right(originalString, (position - 1))
+    ' Handle insertion before the first character
+    If position <= 1 Then
+        InsertStringAtPosition = insertString & originalString
+    ' Handle insertion after the last character
+    ElseIf position > strLength Then
+        InsertStringAtPosition = originalString & insertString
     Else
-        InsertStringAtPosition = Null
+        ' Insert the substring at the specified position
+        InsertStringAtPosition = Left(originalString, position - 1) & insertString & Mid(originalString, position)
     End If
 End Function
 
