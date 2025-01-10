@@ -13,23 +13,35 @@ Private Function InsertStringAtPosition(originalString As String, insertString A
 End Function
 
 Private Function RemoveInvalidChars(ByVal inputString As String) As String
+    
+    Static mapInitialized As Boolean
+    Static invalidMap(0 To 255) As Boolean
+    
     Dim invalidChars As String
     invalidChars = " ~`!@#$%^&*()-+=[]\{}|;':"",./<>?" & vbNewLine & Chr(10) & Chr(160)
     
-    Dim resultString As String
     Dim i As Long
+    Dim c As String
+    Dim resultString As String
     
+    ' Initialize the map once
+    If Not mapInitialized Then
+        For i = 1 To Len(invalidChars)
+            invalidMap(Asc(Mid$(invalidChars, i, 1))) = True
+        Next i
+        mapInitialized = True
+    End If
+    
+    ' Build the result by skipping invalid chars
     For i = 1 To Len(inputString)
-        Dim currentChar As String
-        currentChar = Mid(inputString, i, 1)
-        
-        If InStr(invalidChars, currentChar) = 0 Then
-            resultString = resultString & currentChar
+        c = Mid$(inputString, i, 1)
+        ' Only append if character is not marked invalid
+        If Not invalidMap(Asc(c)) Then
+            resultString = resultString & c
         End If
     Next i
     
     RemoveInvalidChars = resultString
-
 End Function
 
 Private Function oneDArrayConvertToTwoDArray(inputArray As Variant) As Variant
