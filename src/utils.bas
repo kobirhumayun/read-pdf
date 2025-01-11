@@ -81,3 +81,24 @@ ErrorHandler:
     ReadTextFile = "" ' Return an empty string in case of an error
     If fileNumber <> 0 Then Close #fileNumber ' Ensure the file is closed if an error occurred
 End Function
+
+Function ReformatDateString(dateStr As String) As String
+  Dim dayPart As String, monthPart As String, yearPart As String
+  Dim result As String
+
+    ' Check if the input string is exactly 6 characters and numeric
+  If Len(dateStr) = 6 And IsNumeric(dateStr) Then
+      ' Extract day, month, and year parts
+    yearPart = Mid(dateStr, 1, 2)
+    monthPart = Mid(dateStr, 3, 2)
+    dayPart = Mid(dateStr, 5, 2)
+    
+      ' Construct the date string in DD/MM/YY format
+    result = dayPart & "/" & monthPart & "/" & yearPart
+    
+      ' Return the result
+    ReformatDateString = result
+  Else
+    ReformatDateString = "Invalid date format."
+  End If
+End Function
