@@ -12,6 +12,7 @@ Private Function ExtractPdfLcBrac(lcPath As String) As Object
     resultDict.Add "lcNo", Application.Run("Brac.ExtractLcNoBrac", lcText)
     resultDict.Add "lcDt", Application.Run("Brac.ExtractLcDtBrac", lcText)
     resultDict.Add "expiryDt", Application.Run("Brac.ExtractExpiryDtBrac", lcText)
+    resultDict.Add "beneficiary", Application.Run("Brac.ExtractBeneficiaryBrac", lcText)
     
     Set ExtractPdfLcBrac = resultDict
     
@@ -84,6 +85,29 @@ Private Function ExtractExpiryDtBrac(lcText As String) As String
     ' Extract the Dt
     expiryDt = Application.Run("utils.ReformatDateString", expiryDtPortionObj(1))
     ExtractExpiryDtBrac = expiryDt
+End Function
+
+Private Function ExtractBeneficiaryBrac(lcText As String) As String
+    Dim beneficiaryPortionObj As Object
+    Dim beneficiary As String
+
+    ' First regex match to extract the portion containing Beneficiary
+    Set beneficiaryPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcText, "59([\s\S]*?)32B", True, True, True)
+    If beneficiaryPortionObj Is Nothing Or beneficiaryPortionObj.Count = 0 Then
+        ExtractBeneficiaryBrac = vbNullString
+        Exit Function
+    End If
+
+    beneficiary = beneficiaryPortionObj(0)
+
+    ' Second regex match to extract the Beneficiary from the portion
+    Set beneficiaryPortionObj = Application.Run("general_utility_functions.regExReturnedObj", beneficiaryPortionObj(0), ".+", True, True, True)
+
+    beneficiary = Replace(beneficiary, beneficiaryPortionObj(0) & Chr(10), "")
+    beneficiary = Replace(beneficiary, beneficiaryPortionObj(beneficiaryPortionObj.Count - 1), "")
+    beneficiary = Left(beneficiary,Len(beneficiary)-2) 'remove extra two line breck
+
+    ExtractBeneficiaryBrac = beneficiary
 End Function
 
 
