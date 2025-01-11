@@ -16,15 +16,26 @@ Private Function ExtractPdfLcBrac(lcPath As String) As Object
 End Function
 
 Private Function ExtractLcNoBrac(lcText As String) As String
-
     Dim lcPortionObj As Object
-    Set lcPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcText, "20.+\n.+\n31c", True, True, True)
-    Set lcPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcPortionObj(0), ".+", True, True, True)
-    
     Dim lcNo As String
-    lcNo = lcPortionObj(1)
 
+    ' First regex match to extract the portion containing LC number
+    Set lcPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcText, "20.+\n.+\n31c", True, True, True)
+    If lcPortionObj Is Nothing Or lcPortionObj.Count = 0 Then
+        ExtractLcNoBrac = vbNullString
+        Exit Function
+    End If
+
+    ' Second regex match to extract the LC number from the portion
+    Set lcPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcPortionObj(0), ".+", True, True, True)
+    If lcPortionObj Is Nothing Or lcPortionObj.Count < 2 Then
+        ExtractLcNoBrac = vbNullString
+        Exit Function
+    End If
+
+    ' Extract the LC number
+    lcNo = lcPortionObj(1)
     ExtractLcNoBrac = lcNo
-    
 End Function
+
 
