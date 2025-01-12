@@ -13,7 +13,7 @@ Private Function ExtractPdfLcBrac(lcPath As String) As Object
     resultDict.Add "lcDt", Application.Run("Brac.ExtractLcDtBrac", lcText)
     resultDict.Add "expiryDt", Application.Run("Brac.ExtractExpiryDtBrac", lcText)
     resultDict.Add "beneficiary", Application.Run("Brac.ExtractBeneficiaryBrac", lcText)
-    
+
     Set ExtractPdfLcBrac = resultDict
     
 End Function
@@ -28,23 +28,16 @@ Private Function ExtractLcDtBrac(lcText As String) As String
     Dim lcDtPortionObj As Object
     Dim lcDt As String
 
-    ' First regex match to extract the portion containing LC Dt
-    Set lcDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcText, "31c.+\n.+\n40e", True, True, True)
-    If lcDtPortionObj Is Nothing Or lcDtPortionObj.Count = 0 Then
+    lcDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "31c.+\n.+\n40e", 1, 1)
+    Set lcDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcDt, "\d+", True, True, True)
+   
+    If lcDtPortionObj Is Nothing Or lcDtPortionObj.Count <> 1 Then
         ExtractLcDtBrac = vbNullString
         Exit Function
     End If
 
-    ' Second regex match to extract the LC Dt from the portion
-    Set lcDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcDtPortionObj(0), "\d+", True, True, True)
-    If lcDtPortionObj Is Nothing Or lcDtPortionObj.Count < 2 Then
-        ExtractLcDtBrac = vbNullString
-        Exit Function
-    End If
-
-    ' Extract the Dt
-    lcDt = Application.Run("utils.ReformatDateString", lcDtPortionObj(1))
-    ExtractLcDtBrac = lcDt
+    ExtractLcDtBrac = Application.Run("utils.ReformatDateString", lcDtPortionObj(0))
+    
 End Function
 
 Private Function ExtractExpiryDtBrac(lcText As String) As String
