@@ -102,3 +102,68 @@ Function ReformatDateString(dateStr As String) As String
     ReformatDateString = "Invalid date format."
   End If
 End Function
+
+Private Function ExtractTextWithExcludeLines(InputText As String, Pattern As String, ExcludeLinesStart As Long, ExcludeLinesEnd As Long) As String
+  Dim regEx As Object
+  Dim matches As Object
+  Dim resultText As String
+  Dim lines() As String
+  Dim i As Long
+  Dim startIndex As Long, endIndex As Long
+  
+  ' Create a RegExp object
+  Set regEx = CreateObject("VBScript.RegExp")
+  regEx.Global = False        ' Only find the first occurrence
+  regEx.IgnoreCase = True
+  regEx.Multiline = True      ' Treat input as multiple lines
+  regEx.Pattern = Pattern
+    
+  ' Execute the regex on the input text
+  Set matches = regEx.Execute(InputText)
+  
+  ' Check if a match was found
+  If matches.Count > 0 Then
+    ' Get the full matched text
+    resultText = matches(0).Value
+    
+    ' Normalize line breaks to Line Feed (vbLf) to handle different newline characters
+    resultText = Replace(resultText, vbCrLf, vbLf)
+    resultText = Replace(resultText, vbCr, vbLf)
+    
+    ' Split the text into lines
+    lines = Split(resultText, vbLf)
+    
+    ' Calculate start and end indices after excluding specified lines
+    startIndex = LBound(lines) + ExcludeLinesStart
+    endIndex = UBound(lines) - ExcludeLinesEnd
+    
+    ' Ensure indices are within bounds
+    If startIndex > endIndex Or startIndex > UBound(lines) Or endIndex < LBound(lines) Then
+      ' No lines to return
+      ExtractTextWithExcludeLines = ""
+      Exit Function
+    ElseIf startIndex < LBound(lines) Then
+      startIndex = LBound(lines)
+    End If
+
+    If endIndex > UBound(lines) Then
+      endIndex = UBound(lines)
+    End If
+    
+    ' Concatenate the selected lines
+    Dim selectedLines As String
+    For i = startIndex To endIndex
+      selectedLines = selectedLines & lines(i) & vbLf
+    Next i
+    
+    ' Remove the trailing newline character and replace Line Feeds with Carriage Return + Line Feed for Windows compatibility
+    If Right(selectedLines, 1) = vbLf Then
+      selectedLines = Left(selectedLines, Len(selectedLines) - 1)
+    End If
+    ExtractTextWithExcludeLines = Replace(selectedLines, vbLf, vbCrLf)
+  Else
+    ' No match found
+    ExtractTextWithExcludeLines = ""
+  End If
+    
+End Function
