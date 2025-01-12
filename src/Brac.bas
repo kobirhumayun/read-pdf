@@ -44,23 +44,16 @@ Private Function ExtractExpiryDtBrac(lcText As String) As String
     Dim expiryDtPortionObj As Object
     Dim expiryDt As String
 
-    ' First regex match to extract the portion containing expiry Dt
-    Set expiryDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcText, "31d.+\n.+\n50", True, True, True)
-    If expiryDtPortionObj Is Nothing Or expiryDtPortionObj.Count = 0 Then
+    expiryDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "31d.+\n.+\n50", 1, 1)
+    Set expiryDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", expiryDt, "\d+", True, True, True)
+   
+    If expiryDtPortionObj Is Nothing Or expiryDtPortionObj.Count <> 1 Then
         ExtractExpiryDtBrac = vbNullString
         Exit Function
     End If
 
-    ' Second regex match to extract the expiry Dt from the portion
-    Set expiryDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", expiryDtPortionObj(0), "\d+", True, True, True)
-    If expiryDtPortionObj Is Nothing Or expiryDtPortionObj.Count < 2 Then
-        ExtractExpiryDtBrac = vbNullString
-        Exit Function
-    End If
+    ExtractExpiryDtBrac = Application.Run("utils.ReformatDateString", expiryDtPortionObj(0))
 
-    ' Extract the Dt
-    expiryDt = Application.Run("utils.ReformatDateString", expiryDtPortionObj(1))
-    ExtractExpiryDtBrac = expiryDt
 End Function
 
 Private Function ExtractBeneficiaryBrac(lcText As String) As String
