@@ -37,7 +37,7 @@ Private Function ExtractLcDtBrac(lcText As String) As String
     End If
 
     ExtractLcDtBrac = Application.Run("utils.ReformatDateString", lcDtPortionObj(0))
-    
+
 End Function
 
 Private Function ExtractExpiryDtBrac(lcText As String) As String
@@ -57,26 +57,9 @@ Private Function ExtractExpiryDtBrac(lcText As String) As String
 End Function
 
 Private Function ExtractBeneficiaryBrac(lcText As String) As String
-    Dim beneficiaryPortionObj As Object
-    Dim beneficiary As String
 
-    ' First regex match to extract the portion containing Beneficiary
-    Set beneficiaryPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcText, "59([\s\S]*?)32B", True, True, True)
-    If beneficiaryPortionObj Is Nothing Or beneficiaryPortionObj.Count = 0 Then
-        ExtractBeneficiaryBrac = vbNullString
-        Exit Function
-    End If
-
-    beneficiary = beneficiaryPortionObj(0)
-
-    ' Second regex match to extract the Beneficiary from the portion
-    Set beneficiaryPortionObj = Application.Run("general_utility_functions.regExReturnedObj", beneficiaryPortionObj(0), ".+", True, True, True)
-
-    beneficiary = Replace(beneficiary, beneficiaryPortionObj(0) & Chr(10), "")
-    beneficiary = Replace(beneficiary, beneficiaryPortionObj(beneficiaryPortionObj.Count - 1), "")
-    beneficiary = Left(beneficiary,Len(beneficiary)-2) 'remove extra two line breck
-
-    ExtractBeneficiaryBrac = beneficiary
+    ExtractBeneficiaryBrac = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "59([\s\S]*?)32B", 1, 1)
+    
 End Function
 
 
