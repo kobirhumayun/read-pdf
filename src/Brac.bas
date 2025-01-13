@@ -14,6 +14,7 @@ Private Function ExtractPdfLcBrac(lcPath As String) As Object
     resultDict.Add "expiryDt", Application.Run("Brac.ExtractExpiryDtBrac", lcText)
     resultDict.Add "beneficiary", Application.Run("Brac.ExtractBeneficiaryBrac", lcText)
     resultDict.Add "amount", Application.Run("Brac.ExtractAmountBrac", lcText)
+    resultDict.Add "shipmentDt", Application.Run("Brac.ExtractShipmentDtBrac", lcText)
 
     Set ExtractPdfLcBrac = resultDict
     
@@ -80,4 +81,18 @@ Private Function ExtractAmountBrac(lcText As String) As Variant
     
 End Function
 
+Private Function ExtractShipmentDtBrac(lcText As String) As String
+    Dim shipmentDtPortionObj As Object
+    Dim shipmentDt As String
 
+    shipmentDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "44C.+\n.+\n45A", 1, 1)
+    Set shipmentDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", shipmentDt, "\d+", True, True, True)
+   
+    If shipmentDtPortionObj Is Nothing Or shipmentDtPortionObj.Count <> 1 Then
+        ExtractShipmentDtBrac = vbNullString
+        Exit Function
+    End If
+
+    ExtractShipmentDtBrac = Application.Run("utils.ReformatDateString", shipmentDtPortionObj(0))
+
+End Function
