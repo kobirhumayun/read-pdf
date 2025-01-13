@@ -13,6 +13,7 @@ Private Function ExtractPdfLcBrac(lcPath As String) As Object
     resultDict.Add "lcDt", Application.Run("Brac.ExtractLcDtBrac", lcText)
     resultDict.Add "expiryDt", Application.Run("Brac.ExtractExpiryDtBrac", lcText)
     resultDict.Add "beneficiary", Application.Run("Brac.ExtractBeneficiaryBrac", lcText)
+    resultDict.Add "amount", Application.Run("Brac.ExtractAmountBrac", lcText)
 
     Set ExtractPdfLcBrac = resultDict
     
@@ -59,6 +60,23 @@ End Function
 Private Function ExtractBeneficiaryBrac(lcText As String) As String
 
     ExtractBeneficiaryBrac = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "59([\s\S]*?)32B", 1, 1)
+    
+End Function
+
+Private Function ExtractAmountBrac(lcText As String) As Variant
+    Dim amountLineObj As Object
+    Dim amountLine As String
+
+    amountLine = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "32B.+\n.+\n41D", 1, 1)
+
+    Set amountLineObj = Application.Run("general_utility_functions.regExReturnedObj", amountLine, "\d+\,\d+", True, True, True)
+   
+    If amountLineObj Is Nothing Or amountLineObj.Count <> 1 Then
+        ExtractAmountBrac = 0
+        Exit Function
+    End If
+
+    ExtractAmountBrac = Replace(amountLineObj(0), ",", ".")
     
 End Function
 
