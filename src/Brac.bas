@@ -1,6 +1,20 @@
 Attribute VB_Name = "Brac"
 Option Explicit
 
+Private Function ReadBracLcs(b2bPaths As Object) As Object
+    Dim resultDict As Object
+    Set resultDict = CreateObject("Scripting.Dictionary")
+
+    Dim dicKey As Variant
+    
+    For Each dicKey In b2bPaths.Keys
+        resultDict.Add resultDict.Count + 1, Application.Run("Brac.ExtractPdfLcBrac", b2bPaths(dicKey))
+    Next dicKey
+    
+    Set ReadBracLcs = resultDict
+
+End Function
+
 Private Function ExtractPdfLcBrac(lcPath As String) As Object
     
     Dim lcText As String
