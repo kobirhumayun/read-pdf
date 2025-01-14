@@ -15,6 +15,7 @@ Private Function ExtractPdfLcBrac(lcPath As String) As Object
     resultDict.Add "beneficiary", Application.Run("Brac.ExtractBeneficiaryBrac", lcText)
     resultDict.Add "amount", Application.Run("Brac.ExtractAmountBrac", lcText)
     resultDict.Add "shipmentDt", Application.Run("Brac.ExtractShipmentDtBrac", lcText)
+    resultDict.Add "pi", Application.Run("Brac.ExtractPiBrac", lcText)
 
     Set ExtractPdfLcBrac = resultDict
     
@@ -94,5 +95,30 @@ Private Function ExtractShipmentDtBrac(lcText As String) As String
     End If
 
     ExtractShipmentDtBrac = Application.Run("utils.ReformatDateString", shipmentDtPortionObj(0))
+
+End Function
+
+Private Function ExtractPiBrac(lcText As String) As String
+    Dim piPortionObj As Object
+    Dim piPortion As String
+    Dim piConcat As String
+    Dim i As Long
+    piConcat = vbNullString
+
+    piPortion = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "45A([\s\S]*?)46A", 1, 1)
+    Set piPortionObj = Application.Run("general_utility_functions.regExReturnedObj", piPortion, "btl\/\d{2}\/\d{4}", True, True, True)
+   
+    If piPortionObj Is Nothing Or piPortionObj.Count < 1 Then
+        ExtractPiBrac = vbNullString
+        Exit Function
+    End If
+
+    for i = 0 To piPortionObj.Count - 1
+        piConcat = piConcat & piPortionObj(i) & ", "
+    Next i
+
+    piConcat = Left(piConcat, Len(piConcat) - 2)
+
+    ExtractPiBrac = piConcat
 
 End Function
