@@ -75,7 +75,7 @@ End Function
 
 Private Function ExtractBeneficiaryBrac(lcText As String) As String
 
-    ExtractBeneficiaryBrac = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "59([\s\S]*?)32B", 1, 1)
+    ExtractBeneficiaryBrac = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "59 Beneficiary([\s\S]*?)32B", 1, 1)
     
 End Function
 
