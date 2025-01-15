@@ -17,8 +17,11 @@ End Function
 
 Private Function ExtractPdfLcBrac(lcPath As String) As Object
     
+    Dim readPdf As Object
+    Set readPdf = Application.Run("readPdf.ExtractTextFromPdfUsingAcrobatAcroHiliteList", lcPath)
+
     Dim lcText As String
-    lcText = Application.Run("readPdf.ExtractTextFromPdfUsingAcrobatAcroHiliteList", lcPath)
+    lcText = readPdf("totalText")
     
     Dim resultDict As Object
     Set resultDict = CreateObject("Scripting.Dictionary")
@@ -30,6 +33,8 @@ Private Function ExtractPdfLcBrac(lcPath As String) As Object
     resultDict.Add "amount", Application.Run("Brac.ExtractAmountBrac", lcText)
     resultDict.Add "shipmentDt", Application.Run("Brac.ExtractShipmentDtBrac", lcText)
     resultDict.Add "pi", Application.Run("Brac.ExtractPiBrac", lcText)
+
+    resultDict.Add "pdfProperties", readPdf
 
     Set ExtractPdfLcBrac = resultDict
     
