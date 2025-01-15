@@ -85,7 +85,7 @@ Private Function ExtractAmountBrac(lcText As String) As Variant
 
     amountLine = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "32B.+\n.+\n41D", 1, 1)
 
-    Set amountLineObj = Application.Run("general_utility_functions.regExReturnedObj", amountLine, "\d+\,\d+", True, True, True)
+    Set amountLineObj = Application.Run("general_utility_functions.regExReturnedObj", amountLine, "(\d+\,\d+)|(\d+)", True, True, True)
    
     If amountLineObj Is Nothing Or amountLineObj.Count <> 1 Then
         ExtractAmountBrac = 0
