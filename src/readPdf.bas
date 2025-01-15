@@ -111,6 +111,8 @@ Private Function ExtractTextFromPdfUsingAcrobatAcroHiliteList(filePath As String
                 For i = 0 To AcroTextSelect.GetNumText - 1
                     pageText = pageText & AcroTextSelect.GetText(i) ' Extract text
                 Next i
+                
+                resultDict.Add "page_" & (pageNumber + 1), pageText
                 totalText = totalText & vbCrLf & pageText
             Else
                 If Not resultDict.Exists("blankPagesCount") Then resultDict.Add "blankPagesCount", 0
