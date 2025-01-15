@@ -26,7 +26,13 @@ Sub BracLc()
     ws.Cells(row, 5).Value = "Amount"
     ws.Cells(row, 6).Value = "Shipment Date"
     ws.Cells(row, 7).Value = "PI"
-    
+
+    ws.Cells(row, 8).Value = "Page Count"
+    ws.Cells(row, 9).Value = "Text Page Count"
+    ws.Cells(row, 10).Value = "Text Page List"
+    ws.Cells(row, 11).Value = "Blank Page Count"
+    ws.Cells(row, 12).Value = "Blank Page List"
+
     row = row + 1
     
     For Each dicKey In resultDict.Keys
@@ -40,7 +46,13 @@ Sub BracLc()
         ws.Cells(row, 5).Value = tempDict("amount")
         ws.Cells(row, 6).Value = CDate(tempDict("shipmentDt"))
         ws.Cells(row, 7).Value = tempDict("pi")
-        
+
+        ws.Cells(row, 8).value = tempDict("pdfProperties")("totalPageCount")
+        ws.Cells(row, 9).value = tempDict("pdfProperties")("textPagesCount")
+        ws.Cells(row, 10).value = tempDict("pdfProperties")("textPagesList")
+        ws.Cells(row, 11).value = tempDict("pdfProperties")("blankPagesCount")
+        ws.Cells(row, 12).value = tempDict("pdfProperties")("blankPagesList")
+
         row = row + 1
     
     Next dicKey
