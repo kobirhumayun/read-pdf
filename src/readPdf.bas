@@ -67,7 +67,7 @@ ErrorHandler:
     Resume CleanUp
 End Function
 
-Function ExtractTextFromPdfUsingAcrobatAcroHiliteList(filePath As String) As String
+Private Function ExtractTextFromPdfUsingAcrobatAcroHiliteList(filePath As String) As Object
     Dim AcroApp As Object
     Dim AcroDoc As Object
     Dim AcroPage As Object
@@ -77,7 +77,10 @@ Function ExtractTextFromPdfUsingAcrobatAcroHiliteList(filePath As String) As Str
     Dim pageText As String
     Dim totalText As String
     Dim totalPages As Long
+    Dim resultDict As Object
     Dim i As Long
+
+    Set resultDict = CreateObject("Scripting.Dictionary")
 
     ' Initialize the total text variable
     totalText = ""
@@ -89,6 +92,7 @@ Function ExtractTextFromPdfUsingAcrobatAcroHiliteList(filePath As String) As Str
     ' Open the PDF file
     If AcroDoc.Open(filePath) Then
         totalPages = AcroDoc.GetNumPages() ' Get total number of pages in the PDF
+        resultDict.Add "totalPageCount", totalPages
 
         ' Loop through each page and extract text
         For pageNumber = 0 To totalPages - 1
@@ -99,10 +103,20 @@ Function ExtractTextFromPdfUsingAcrobatAcroHiliteList(filePath As String) As Str
             Set AcroTextSelect = AcroPage.CreatePageHilite(AcroHiliteList)
             If Not AcroTextSelect Is Nothing Then
                 pageText = ""
+                If Not resultDict.Exists("textPagesCount") Then resultDict.Add "textPagesCount", 0
+                If Not resultDict.Exists("textPagesList") Then resultDict.Add "textPagesList", ""
+                resultDict("textPagesCount") = resultDict("textPagesCount") + 1
+                resultDict("textPagesList") = resultDict("textPagesList") & IIf(resultDict("textPagesList") = "", "", ",") & (pageNumber + 1)
+
                 For i = 0 To AcroTextSelect.GetNumText - 1
                     pageText = pageText & AcroTextSelect.GetText(i) ' Extract text
                 Next i
                 totalText = totalText & vbCrLf & pageText
+            Else
+                If Not resultDict.Exists("blankPagesCount") Then resultDict.Add "blankPagesCount", 0
+                If Not resultDict.Exists("blankPagesList") Then resultDict.Add "blankPagesList", ""
+                resultDict("blankPagesCount") = resultDict("blankPagesCount") + 1
+                resultDict("blankPagesList") = resultDict("blankPagesList") & IIf(resultDict("blankPagesList") = "", "", ",") & (pageNumber + 1)
             End If
         Next pageNumber
 
@@ -120,6 +134,8 @@ Function ExtractTextFromPdfUsingAcrobatAcroHiliteList(filePath As String) As Str
     Set AcroHiliteList = Nothing
     Set AcroTextSelect = Nothing
 
+    resultDict.Add "totalText", totalText
+
     ' Return the extracted text
-    ExtractTextFromPdfUsingAcrobatAcroHiliteList = totalText
+    Set ExtractTextFromPdfUsingAcrobatAcroHiliteList = resultDict
 End Function
