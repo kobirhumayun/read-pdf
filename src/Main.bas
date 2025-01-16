@@ -40,13 +40,20 @@ Sub BracLc()
         Set tempDict = resultDict(dicKey)
         
         ws.Cells(row, 1).Value = tempDict("lcNo")
-        ws.Cells(row, 2).Value = CDate(tempDict("lcDt"))
-        ws.Cells(row, 3).Value = CDate(tempDict("expiryDt"))
+        If tempDict("lcDt") <> "" Then
+            ws.Cells(row, 2).Value = IIf(IsDate(tempDict("lcDt")), CDate(tempDict("lcDt")), tempDict("lcDt"))
+        End If
+        If tempDict("expiryDt") <> "" Then
+            ws.Cells(row, 3).Value = IIf(IsDate(tempDict("expiryDt")), CDate(tempDict("expiryDt")), tempDict("expiryDt"))
+        End If
         ws.Cells(row, 4).Value = tempDict("beneficiary")
         ws.Cells(row, 5).Value = tempDict("amount")
-        ws.Cells(row, 6).Value = CDate(tempDict("shipmentDt"))
+        If tempDict("shipmentDt") <> "" Then
+            ws.Cells(row, 6).Value = IIf(IsDate(tempDict("shipmentDt")), CDate(tempDict("shipmentDt")), tempDict("shipmentDt"))
+        End If
         ws.Cells(row, 7).Value = tempDict("pi")
 
+            ' just for testing
         ws.Cells(row, 8).value = tempDict("pdfProperties")("totalPageCount")
         ws.Cells(row, 9).value = tempDict("pdfProperties")("textPagesCount")
         ws.Cells(row, 10).value = tempDict("pdfProperties")("textPagesList")
