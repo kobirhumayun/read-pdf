@@ -167,3 +167,66 @@ Private Function ExtractTextWithExcludeLines(InputText As String, Pattern As Str
   End If
     
 End Function
+
+Private Function PutB2bDataToWs(resultDict As Object, ws As Worksheet, printHeaders As Boolean, startRow As Long, startColumn As Long, printPdfProperties As Boolean) As Boolean
+  ' Declare variables
+  Dim tempDict As Object
+  
+  Dim dicKey As Variant
+  
+  Dim row As Long
+  row = startRow
+
+  Dim columns As Long
+  columns = startColumn
+  
+  ' Print headers if printHeaders is True
+  If printHeaders Then
+    ws.Cells(row, columns).Value = "LC No"
+    ws.Cells(row, columns + 1).Value = "LC Date"
+    ws.Cells(row, columns + 2).Value = "Expiry Date"
+    ws.Cells(row, columns + 3).Value = "Beneficiary"
+    ws.Cells(row, columns + 4).Value = "Amount"
+    ws.Cells(row, columns + 5).Value = "Shipment Date"
+    ws.Cells(row, columns + 6).Value = "PI"
+    ws.Cells(row, columns + 7).Value = "Page Count"
+    ws.Cells(row, columns + 8).Value = "Text Page Count"
+    ws.Cells(row, columns + 9).Value = "Text Page List"
+    ws.Cells(row, columns + 10).Value = "Blank Page Count"
+    ws.Cells(row, columns + 11).Value = "Blank Page List"
+    row = row + 1
+  End If
+  
+  For Each dicKey In resultDict.Keys
+  
+      Set tempDict = resultDict(dicKey)
+      
+      ws.Cells(row, columns).Value = tempDict("lcNo")
+      If tempDict("lcDt") <> "" Then
+          ws.Cells(row, columns + 1).Value = IIf(IsDate(tempDict("lcDt")), CDate(tempDict("lcDt")), tempDict("lcDt"))
+      End If
+      If tempDict("expiryDt") <> "" Then
+          ws.Cells(row, columns + 2).Value = IIf(IsDate(tempDict("expiryDt")), CDate(tempDict("expiryDt")), tempDict("expiryDt"))
+      End If
+      ws.Cells(row, columns + 3).Value = tempDict("beneficiary")
+      ws.Cells(row, columns + 4).Value = tempDict("amount")
+      If tempDict("shipmentDt") <> "" Then
+          ws.Cells(row, columns + 5).Value = IIf(IsDate(tempDict("shipmentDt")), CDate(tempDict("shipmentDt")), tempDict("shipmentDt"))
+      End If
+      ws.Cells(row, columns + 6).Value = tempDict("pi")
+
+      If printPdfProperties Then
+        ws.Cells(row, columns + 7).Value = tempDict("pdfProperties")("totalPageCount")
+        ws.Cells(row, columns + 8).Value = tempDict("pdfProperties")("textPagesCount")
+        ws.Cells(row, columns + 9).Value = tempDict("pdfProperties")("textPagesList")
+        ws.Cells(row, columns + 10).Value = tempDict("pdfProperties")("blankPagesCount")
+        ws.Cells(row, columns + 11).Value = tempDict("pdfProperties")("blankPagesList")
+      End If
+
+      row = row + 1
+  
+  Next dicKey 
+
+  PutB2bDataToWs = True ' Indicate success
+
+End Function
