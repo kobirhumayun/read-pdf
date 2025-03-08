@@ -80,7 +80,7 @@ End Function
 
 Private Function ExtractBeneficiaryAlArafah(lcText As String) As String
 
-    ExtractBeneficiaryAlArafah = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "59 Beneficiary([\s\S]*?)32B", 1, 1)
+    ExtractBeneficiaryAlArafah = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "59\: Beneficiary([\s\S]*?)32B", 1, 1)
     
 End Function
 
