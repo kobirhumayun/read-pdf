@@ -66,8 +66,8 @@ Private Function ExtractExpiryDtAlArafah(lcText As String) As String
     Dim expiryDtPortionObj As Object
     Dim expiryDt As String
 
-    expiryDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "31d.+\n.+\n50", 1, 1)
-    Set expiryDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", expiryDt, "\d+", True, True, True)
+    expiryDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "31d.+\n.+\n.+\n51d", 1, 2)
+    Set expiryDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", expiryDt, "\d{6}", True, True, True)
    
     If expiryDtPortionObj Is Nothing Or expiryDtPortionObj.Count <> 1 Then
         ExtractExpiryDtAlArafah = vbNullString
