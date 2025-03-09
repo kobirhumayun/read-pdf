@@ -42,7 +42,7 @@ End Function
 
 Private Function ExtractLcNoScb(lcText As String) As String
     
-    ExtractLcNoScb = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "20.+\n.+\n31c", 1, 1)
+    ExtractLcNoScb = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "\:20.+\n.+\n\:31c", 1, 1)
 
 End Function
 
@@ -50,8 +50,8 @@ Private Function ExtractLcDtScb(lcText As String) As String
     Dim lcDtPortionObj As Object
     Dim lcDt As String
 
-    lcDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "31c.+\n.+\n40e", 1, 1)
-    Set lcDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcDt, "\d+", True, True, True)
+    lcDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "\:31c.+\n.+\n\:40e", 1, 1)
+    Set lcDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcDt, "\d+", False, True, True)
    
     If lcDtPortionObj Is Nothing Or lcDtPortionObj.Count <> 1 Then
         ExtractLcDtScb = vbNullString
@@ -66,8 +66,8 @@ Private Function ExtractExpiryDtScb(lcText As String) As String
     Dim expiryDtPortionObj As Object
     Dim expiryDt As String
 
-    expiryDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "31d.+\n.+\n50", 1, 1)
-    Set expiryDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", expiryDt, "\d+", True, True, True)
+    expiryDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "\:31d.+\n.+\n\:50", 1, 1)
+    Set expiryDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", expiryDt, "\d+", False, True, True)
    
     If expiryDtPortionObj Is Nothing Or expiryDtPortionObj.Count <> 1 Then
         ExtractExpiryDtScb = vbNullString
@@ -80,7 +80,7 @@ End Function
 
 Private Function ExtractBeneficiaryScb(lcText As String) As String
 
-    ExtractBeneficiaryScb = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "59 Beneficiary([\s\S]*?)32B", 1, 1)
+    ExtractBeneficiaryScb = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "\:59\:.+Beneficiary([\s\S]*?)\:32B", 1, 1)
     
 End Function
 
@@ -88,7 +88,7 @@ Private Function ExtractAmountScb(lcText As String) As Variant
     Dim amountLineObj As Object
     Dim amountLine As String
 
-    amountLine = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "32B.+\n.+\n41D", 1, 1)
+    amountLine = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "\:32B.+\n.+\n\:41D", 1, 1)
 
     Set amountLineObj = Application.Run("general_utility_functions.regExReturnedObj", amountLine, "(\d+\,\d+)|(\d+)", True, True, True)
    
@@ -105,7 +105,7 @@ Private Function ExtractShipmentDtScb(lcText As String) As String
     Dim shipmentDtPortionObj As Object
     Dim shipmentDt As String
 
-    shipmentDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "44C.+\n.+\n45A", 1, 1)
+    shipmentDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "\:44C.+\n.+\n\:45A", 1, 1)
     Set shipmentDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", shipmentDt, "\d+", True, True, True)
    
     If shipmentDtPortionObj Is Nothing Or shipmentDtPortionObj.Count <> 1 Then
@@ -124,7 +124,7 @@ Private Function ExtractPiScb(lcText As String) As String
     Dim i As Long
     piConcat = vbNullString
 
-    piPortion = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "45A([\s\S]*?)46A", 1, 1)
+    piPortion = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "\:45A([\s\S]*?)\:47A", 1, 1)
     Set piPortionObj = Application.Run("general_utility_functions.regExReturnedObj", piPortion, "btl\/\d{2}\/\d{4}", True, True, True)
    
     If piPortionObj Is Nothing Or piPortionObj.Count < 1 Then
