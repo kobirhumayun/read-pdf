@@ -42,7 +42,7 @@ End Function
 
 Private Function ExtractLcNoMtb(lcText As String) As String
     
-    ExtractLcNoMtb = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "20.+\n.+\n31c", 1, 1)
+    ExtractLcNoMtb = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "f20.+\n.+\nf31c", 1, 1)
 
 End Function
 
@@ -50,8 +50,8 @@ Private Function ExtractLcDtMtb(lcText As String) As String
     Dim lcDtPortionObj As Object
     Dim lcDt As String
 
-    lcDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "31c.+\n.+\n40e", 1, 1)
-    Set lcDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcDt, "\d+", True, True, True)
+    lcDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "f31c.+\n.+\nf40e", 1, 1)
+    Set lcDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", lcDt, "\d{6}", False, True, True)
    
     If lcDtPortionObj Is Nothing Or lcDtPortionObj.Count <> 1 Then
         ExtractLcDtMtb = vbNullString
@@ -66,8 +66,8 @@ Private Function ExtractExpiryDtMtb(lcText As String) As String
     Dim expiryDtPortionObj As Object
     Dim expiryDt As String
 
-    expiryDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "31d.+\n.+\n50", 1, 1)
-    Set expiryDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", expiryDt, "\d+", True, True, True)
+    expiryDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "f31d.+\n.+\n.+\nf50", 1, 2)
+    Set expiryDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", expiryDt, "\d{6}", False, True, True)
    
     If expiryDtPortionObj Is Nothing Or expiryDtPortionObj.Count <> 1 Then
         ExtractExpiryDtMtb = vbNullString
@@ -80,7 +80,7 @@ End Function
 
 Private Function ExtractBeneficiaryMtb(lcText As String) As String
 
-    ExtractBeneficiaryMtb = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "59 Beneficiary([\s\S]*?)32B", 1, 1)
+    ExtractBeneficiaryMtb = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "f59.+Beneficiary([\s\S]*?)f32B", 2, 1)
     
 End Function
 
@@ -88,9 +88,9 @@ Private Function ExtractAmountMtb(lcText As String) As Variant
     Dim amountLineObj As Object
     Dim amountLine As String
 
-    amountLine = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "32B.+\n.+\n41D", 1, 1)
+    amountLine = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "f32B.+\n.+\n.+\nf41D", 2, 1)
 
-    Set amountLineObj = Application.Run("general_utility_functions.regExReturnedObj", amountLine, "(\d+\,\d+)|(\d+)", True, True, True)
+    Set amountLineObj = Application.Run("general_utility_functions.regExReturnedObj", amountLine, "(\d+\,\d+)|(\d+)", False, True, True)
    
     If amountLineObj Is Nothing Or amountLineObj.Count <> 1 Then
         ExtractAmountMtb = 0
@@ -105,8 +105,8 @@ Private Function ExtractShipmentDtMtb(lcText As String) As String
     Dim shipmentDtPortionObj As Object
     Dim shipmentDt As String
 
-    shipmentDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "44C.+\n.+\n45A", 1, 1)
-    Set shipmentDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", shipmentDt, "\d+", True, True, True)
+    shipmentDt = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "f44C.+\n.+\nf45A", 1, 1)
+    Set shipmentDtPortionObj = Application.Run("general_utility_functions.regExReturnedObj", shipmentDt, "\d{6}", False, True, True)
    
     If shipmentDtPortionObj Is Nothing Or shipmentDtPortionObj.Count <> 1 Then
         ExtractShipmentDtMtb = vbNullString
@@ -124,7 +124,7 @@ Private Function ExtractPiMtb(lcText As String) As String
     Dim i As Long
     piConcat = vbNullString
 
-    piPortion = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "45A([\s\S]*?)46A", 1, 1)
+    piPortion = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "f45A([\s\S]*?)f46A", 1, 1)
     Set piPortionObj = Application.Run("general_utility_functions.regExReturnedObj", piPortion, "btl\/\d{2}\/\d{4}", True, True, True)
    
     If piPortionObj Is Nothing Or piPortionObj.Count < 1 Then
