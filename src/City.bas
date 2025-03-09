@@ -80,7 +80,7 @@ End Function
 
 Private Function ExtractBeneficiaryCity(lcText As String) As String
 
-    ExtractBeneficiaryCity = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "59 Beneficiary([\s\S]*?)32B", 1, 1)
+    ExtractBeneficiaryCity = Application.Run("utils.ExtractTextWithExcludeLines", lcText, "59.+Beneficiary([\s\S]*?)32B", 1, 1)
     
 End Function
 
