@@ -65,6 +65,22 @@ Sub MtbLc()
     
 End Sub
 
+Sub Mtb1Lc()
+
+    Dim b2bPaths As Object
+    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2025", "Select Mtb1 LC Only", "pdf")
+    
+    Dim resultDict As Object
+    Set resultDict = Application.Run("Mtb1.ReadMtb1Lcs", b2bPaths)
+
+    Dim ws As Worksheet
+    Set ws = ActiveWorkbook.ActiveSheet
+
+    Dim printB2bInfo As Boolean
+    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True)
+    
+End Sub
+
 Sub ScbLc()
 
     Dim b2bPaths As Object
