@@ -8,17 +8,16 @@ Private Function ReadMtb1Lcs(b2bPaths As Object) As Object
     Dim dicKey As Variant
     
     For Each dicKey In b2bPaths.Keys
-        resultDict.Add resultDict.Count + 1, Application.Run("Mtb1.ExtractPdfLcMtb1", b2bPaths(dicKey))
+        Dim readPdf As Object
+        Set readPdf = Application.Run("readPdf.ExtractTextFromPdfUsingAcrobatAcroHiliteList", b2bPaths(dicKey))
+        resultDict.Add resultDict.Count + 1, Application.Run("Mtb1.ExtractPdfLcMtb1", readPdf)
     Next dicKey
     
     Set ReadMtb1Lcs = resultDict
 
 End Function
 
-Private Function ExtractPdfLcMtb1(lcPath As String) As Object
-    
-    Dim readPdf As Object
-    Set readPdf = Application.Run("readPdf.ExtractTextFromPdfUsingAcrobatAcroHiliteList", lcPath)
+Private Function ExtractPdfLcMtb1(readPdf As Object) As Object
 
     Dim lcText As String
     lcText = readPdf("totalText")
