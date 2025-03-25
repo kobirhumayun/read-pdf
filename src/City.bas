@@ -8,17 +8,16 @@ Private Function ReadCityLcs(b2bPaths As Object) As Object
     Dim dicKey As Variant
     
     For Each dicKey In b2bPaths.Keys
-        resultDict.Add resultDict.Count + 1, Application.Run("City.ExtractPdfLcCity", b2bPaths(dicKey))
+        Dim readPdf As Object
+        Set readPdf = Application.Run("readPdf.ExtractTextFromPdfUsingAcrobatAcroHiliteList", b2bPaths(dicKey))
+        resultDict.Add resultDict.Count + 1, Application.Run("City.ExtractPdfLcCity", readPdf)
     Next dicKey
     
     Set ReadCityLcs = resultDict
 
 End Function
 
-Private Function ExtractPdfLcCity(lcPath As String) As Object
-    
-    Dim readPdf As Object
-    Set readPdf = Application.Run("readPdf.ExtractTextFromPdfUsingAcrobatAcroHiliteList", lcPath)
+Private Function ExtractPdfLcCity(readPdf As Object) As Object
 
     Dim lcText As String
     lcText = readPdf("totalText")
