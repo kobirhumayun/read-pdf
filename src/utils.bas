@@ -311,3 +311,31 @@ Private Function LcOfWhichBank(readPdf As Object) As Object
   Set LcOfWhichBank = resultDict
 
 End Function
+
+Private Function ExtractAnyBankLc(readPdf As Object) As Object
+  
+  Dim resultDict As Object
+  Set resultDict = CreateObject("Scripting.Dictionary")
+  Dim bankName As String
+  Dim bankNameDict As Object
+  Set bankNameDict = Application.Run("utils.LcOfWhichBank", readPdf)
+
+  bankName = bankNameDict("bankName")
+
+  If bankName = "AlArafah" Then
+      Set resultDict = Application.Run("AlArafah.ExtractPdfLcAlArafah", readPdf)
+  ElseIf bankName = "Brac" Then
+      Set resultDict = Application.Run("Brac.ExtractPdfLcBrac", readPdf)
+  ElseIf bankName = "City" Then
+      Set resultDict = Application.Run("City.ExtractPdfLcCity", readPdf)
+  ElseIf bankName = "Mtb" Then
+      Set resultDict = Application.Run("Mtb.ExtractPdfLcMtb", readPdf)
+  ElseIf bankName = "Mtb1" Then
+      Set resultDict = Application.Run("Mtb1.ExtractPdfLcMtb1", readPdf)
+  ElseIf bankName = "Scb" Then
+      Set resultDict = Application.Run("Scb.ExtractPdfLcScb", readPdf)
+  End If
+
+  Set ExtractAnyBankLc = resultDict
+
+End Function
