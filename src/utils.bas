@@ -168,7 +168,7 @@ Private Function ExtractTextWithExcludeLines(InputText As String, Pattern As Str
     
 End Function
 
-Private Function PutB2bDataToWs(resultDict As Object, ws As Worksheet, printHeaders As Boolean, startRow As Long, startColumn As Long, printPdfProperties As Boolean) As Boolean
+Private Function PutB2bDataToWs(resultDict As Object, ws As Worksheet, printHeaders As Boolean, startRow As Long, startColumn As Long, printShipExpAndOthers As Boolean, printPdfProperties As Boolean) As Boolean
   ' Declare variables
   Dim tempDict As Object
   
@@ -184,10 +184,10 @@ Private Function PutB2bDataToWs(resultDict As Object, ws As Worksheet, printHead
   If printHeaders Then
     ws.Cells(row, columns).Value = "LC No"
     ws.Cells(row, columns + 1).Value = "LC Date"
-    ws.Cells(row, columns + 2).Value = "Expiry Date"
-    ws.Cells(row, columns + 3).Value = "Beneficiary"
-    ws.Cells(row, columns + 4).Value = "Amount"
-    ws.Cells(row, columns + 5).Value = "Shipment Date"
+    ws.Cells(row, columns + 2).Value = "Amount"
+    ws.Cells(row, columns + 3).Value = "Shipment Date"
+    ws.Cells(row, columns + 4).Value = "Expiry Date"
+    ws.Cells(row, columns + 5).Value = "Beneficiary"
     ws.Cells(row, columns + 6).Value = "PI"
     ws.Cells(row, columns + 7).Value = "Page Count"
     ws.Cells(row, columns + 8).Value = "Text Page Count"
@@ -205,15 +205,20 @@ Private Function PutB2bDataToWs(resultDict As Object, ws As Worksheet, printHead
       If tempDict("lcDt") <> "" Then
           ws.Cells(row, columns + 1).Value = IIf(IsDate(tempDict("lcDt")), CDate(tempDict("lcDt")), tempDict("lcDt"))
       End If
-      If tempDict("expiryDt") <> "" Then
-          ws.Cells(row, columns + 2).Value = IIf(IsDate(tempDict("expiryDt")), CDate(tempDict("expiryDt")), tempDict("expiryDt"))
+      ws.Cells(row, columns + 2).Value = tempDict("amount")
+
+      If printShipExpAndOthers Then
+
+        If tempDict("shipmentDt") <> "" Then
+          ws.Cells(row, columns + 3).Value = IIf(IsDate(tempDict("shipmentDt")), CDate(tempDict("shipmentDt")), tempDict("shipmentDt"))
+        End If
+        If tempDict("expiryDt") <> "" Then
+            ws.Cells(row, columns + 4).Value = IIf(IsDate(tempDict("expiryDt")), CDate(tempDict("expiryDt")), tempDict("expiryDt"))
+        End If
+        ws.Cells(row, columns + 5).Value = tempDict("beneficiary")
+        ws.Cells(row, columns + 6).Value = tempDict("pi")
+        
       End If
-      ws.Cells(row, columns + 3).Value = tempDict("beneficiary")
-      ws.Cells(row, columns + 4).Value = tempDict("amount")
-      If tempDict("shipmentDt") <> "" Then
-          ws.Cells(row, columns + 5).Value = IIf(IsDate(tempDict("shipmentDt")), CDate(tempDict("shipmentDt")), tempDict("shipmentDt"))
-      End If
-      ws.Cells(row, columns + 6).Value = tempDict("pi")
 
       If printPdfProperties Then
         ws.Cells(row, columns + 7).Value = tempDict("pdfProperties")("totalPageCount")
