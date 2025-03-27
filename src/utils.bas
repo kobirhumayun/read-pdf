@@ -185,15 +185,22 @@ Private Function PutB2bDataToWs(resultDict As Object, ws As Worksheet, printHead
     ws.Cells(row, columns).Value = "LC No"
     ws.Cells(row, columns + 1).Value = "LC Date"
     ws.Cells(row, columns + 2).Value = "Amount"
-    ws.Cells(row, columns + 3).Value = "Shipment Date"
-    ws.Cells(row, columns + 4).Value = "Expiry Date"
-    ws.Cells(row, columns + 5).Value = "Beneficiary"
-    ws.Cells(row, columns + 6).Value = "PI"
-    ws.Cells(row, columns + 7).Value = "Page Count"
-    ws.Cells(row, columns + 8).Value = "Text Page Count"
-    ws.Cells(row, columns + 9).Value = "Text Page List"
-    ws.Cells(row, columns + 10).Value = "Blank Page Count"
-    ws.Cells(row, columns + 11).Value = "Blank Page List"
+
+    If printShipExpAndOthers Then
+      ws.Cells(row, columns + 3).Value = "Shipment Date"
+      ws.Cells(row, columns + 4).Value = "Expiry Date"
+      ws.Cells(row, columns + 5).Value = "Beneficiary"
+      ws.Cells(row, columns + 6).Value = "PI"
+    End If
+
+    If printPdfProperties Then
+      ws.Cells(row, columns + 7).Value = "Page Count"
+      ws.Cells(row, columns + 8).Value = "Text Page Count"
+      ws.Cells(row, columns + 9).Value = "Text Page List"
+      ws.Cells(row, columns + 10).Value = "Blank Page Count"
+      ws.Cells(row, columns + 11).Value = "Blank Page List"
+    End If
+    
     row = row + 1
   End If
   
