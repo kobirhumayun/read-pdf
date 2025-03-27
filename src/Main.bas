@@ -105,32 +105,13 @@ Sub AnyBankLc()
     Dim resultDict As Object
     Set resultDict = CreateObject("Scripting.Dictionary")
 
-    Dim bankNameDict As Object
-
     Dim dicKey As Variant
     
     For Each dicKey In b2bPaths.Keys
         Dim readPdf As Object
         Set readPdf = Application.Run("readPdf.ExtractTextFromPdfUsingAcrobatAcroHiliteList", b2bPaths(dicKey))
 
-        Dim bankName As String
-        Set bankNameDict = Application.Run("utils.LcOfWhichBank", readPdf)
-
-        bankName = bankNameDict("bankName")
-
-        If bankName = "AlArafah" Then
-            resultDict.Add resultDict.Count + 1, Application.Run("AlArafah.ExtractPdfLcAlArafah", readPdf)
-        ElseIf bankName = "Brac" Then
-            resultDict.Add resultDict.Count + 1, Application.Run("Brac.ExtractPdfLcBrac", readPdf)
-        ElseIf bankName = "City" Then
-            resultDict.Add resultDict.Count + 1, Application.Run("City.ExtractPdfLcCity", readPdf)
-        ElseIf bankName = "Mtb" Then
-            resultDict.Add resultDict.Count + 1, Application.Run("Mtb.ExtractPdfLcMtb", readPdf)
-        ElseIf bankName = "Mtb1" Then
-            resultDict.Add resultDict.Count + 1, Application.Run("Mtb1.ExtractPdfLcMtb1", readPdf)
-        ElseIf bankName = "Scb" Then
-            resultDict.Add resultDict.Count + 1, Application.Run("Scb.ExtractPdfLcScb", readPdf)
-        End If
+       resultDict.Add resultDict.Count + 1, Application.Run("utils.ExtractAnyBankLc", readPdf)
 
     Next dicKey
 
