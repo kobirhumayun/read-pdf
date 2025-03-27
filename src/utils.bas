@@ -230,3 +230,84 @@ Private Function PutB2bDataToWs(resultDict As Object, ws As Worksheet, printHead
   PutB2bDataToWs = True ' Indicate success
 
 End Function
+
+Private Function LcOfWhichBank(readPdf As Object) As Object
+
+  Dim lcText As String
+  lcText = readPdf("totalText")
+  
+  Dim resultDict As Object
+  Set resultDict = CreateObject("Scripting.Dictionary")
+  
+  Dim bankName As String
+
+  bankName =  Application.Run("AlArafah.ExtractLcNoAlArafah", lcText)
+
+  If bankName <> "" And Left(bankName, 4) = "1080" Then
+
+    bankName = "AlArafah"
+    resultDict.Add "bankName", bankName
+    Set LcOfWhichBank = resultDict
+    Exit Function
+    
+  End If
+  
+  bankName =  Application.Run("Brac.ExtractLcNoBrac", lcText)
+
+  If bankName <> "" And Left(bankName, 4) = "3085" Then
+
+    bankName = "Brac"
+    resultDict.Add "bankName", bankName
+    Set LcOfWhichBank = resultDict
+    Exit Function
+
+  End If
+
+  bankName =  Application.Run("City.ExtractLcNoCity", lcText)
+
+  If bankName <> "" And Left(bankName, 5) = "07422" Then
+
+    bankName = "City"
+    resultDict.Add "bankName", bankName
+    Set LcOfWhichBank = resultDict
+    Exit Function
+
+  End If
+
+  bankName =  Application.Run("Mtb.ExtractLcNoMtb", lcText)
+
+  If bankName <> "" And Left(bankName, 7) = "0002228" Then
+
+    bankName = "Mtb"
+    resultDict.Add "bankName", bankName
+    Set LcOfWhichBank = resultDict
+    Exit Function
+
+  End If
+
+  bankName =  Application.Run("Mtb1.ExtractLcNoMtb1", lcText)
+
+  If bankName <> "" And Left(bankName, 7) = "0002228" Then
+
+    bankName = "Mtb1"
+    resultDict.Add "bankName", bankName
+    Set LcOfWhichBank = resultDict
+    Exit Function
+
+  End If
+
+  bankName =  Application.Run("Scb.ExtractLcNoScb", lcText)
+
+  If bankName <> "" And Left(bankName, 4) = "4110" Then
+
+    bankName = "Scb"
+    resultDict.Add "bankName", bankName
+    Set LcOfWhichBank = resultDict
+    Exit Function
+
+  End If
+
+  resultDict.Add "bankName", "Unknown"
+  Set LcOfWhichBank = resultDict
+
+End Function
