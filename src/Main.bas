@@ -119,7 +119,7 @@ Sub AnyBankLc()
     Set ws = ActiveWorkbook.ActiveSheet
 
     Dim printB2bInfo As Boolean
-    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True)
+    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, False, False)
     
     
 End Sub
