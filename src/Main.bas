@@ -13,7 +13,7 @@ Sub BracLc()
     Set ws = ActiveWorkbook.ActiveSheet
 
     Dim printB2bInfo As Boolean
-    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True)
+    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True, True)
     
 End Sub
 
@@ -29,7 +29,7 @@ Sub AlArafahLc()
     Set ws = ActiveWorkbook.ActiveSheet
 
     Dim printB2bInfo As Boolean
-    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True)
+    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True, True)
     
 End Sub
 
@@ -45,7 +45,7 @@ Sub CityLc()
     Set ws = ActiveWorkbook.ActiveSheet
 
     Dim printB2bInfo As Boolean
-    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True)
+    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True, True)
     
 End Sub
 
@@ -61,7 +61,7 @@ Sub MtbLc()
     Set ws = ActiveWorkbook.ActiveSheet
 
     Dim printB2bInfo As Boolean
-    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True)
+    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True, True)
     
 End Sub
 
@@ -77,7 +77,7 @@ Sub Mtb1Lc()
     Set ws = ActiveWorkbook.ActiveSheet
 
     Dim printB2bInfo As Boolean
-    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True)
+    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True, True)
     
 End Sub
 
@@ -93,7 +93,7 @@ Sub ScbLc()
     Set ws = ActiveWorkbook.ActiveSheet
 
     Dim printB2bInfo As Boolean
-    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True)
+    printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, True, True)
     
 End Sub
 
