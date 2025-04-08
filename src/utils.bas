@@ -351,3 +351,118 @@ Private Function ExtractAnyBankLc(readPdf As Object) As Object
   Set ExtractAnyBankLc = resultDict
 
 End Function
+
+Private Function PrintPdfPageRange(ByVal filePath As String, ByVal startPage As Integer, ByVal endPage As Integer) As Boolean
+    ' Purpose: Prints a specified page range of a PDF file silently using Adobe Acrobat SDK.
+    ' Returns: True if printing was initiated successfully, False otherwise.
+    ' Notes:
+    ' - Requires Adobe Acrobat (Standard or Pro, *not* just Reader) to be installed.
+    ' - Uses Late Binding for better compatibility across Acrobat versions.
+    ' - Assumes startPage and endPage are 1-based page numbers.
+
+    Dim avDoc As Object
+    Dim pdDoc As Object
+    Dim printSuccess As Boolean
+    Dim actualStartPage As Integer
+    Dim actualEndPage As Integer
+    Dim numPages As Long
+
+    ' --- Initialize ---
+    printSuccess = False ' Default to failure
+    Set avDoc = Nothing
+    Set pdDoc = Nothing
+
+    ' --- Input Validation ---
+    If Len(Dir(filePath)) = 0 Then ' Check if file exists
+        MsgBox "Error: PDF file not found." & vbCrLf & filePath, vbCritical, "File Not Found"
+        GoTo Cleanup ' Exit point
+    End If
+
+    If startPage < 1 Or endPage < startPage Then
+        MsgBox "Error: Invalid page range specified (" & startPage & " to " & endPage & "). Start page must be >= 1 and End page must be >= Start page.", vbCritical, "Invalid Page Range"
+        GoTo Cleanup ' Exit point
+    End If
+
+    ' --- Set up Error Handling ---
+    On Error GoTo ErrorHandler
+
+    ' --- Create Acrobat Application Document Object (AVDoc) ---
+    ' This is usually sufficient to interact with a document view/printing
+    Set avDoc = CreateObject("AcroExch.AVDoc")
+
+    ' --- Open the PDF Document Silently ---
+    If avDoc.Open(filePath, "") Then
+
+        ' --- Get the PDDoc to check page count ---
+        Set pdDoc = avDoc.GetPDDoc()
+        numPages = pdDoc.GetNumPages()
+
+        ' --- Validate page range against actual document pages ---
+        If startPage > numPages Then
+             MsgBox "Error: Start page (" & startPage & ") exceeds the total number of pages (" & numPages & ") in the document.", vbCritical, "Invalid Page Range"
+             GoTo Cleanup ' Exit point
+        End If
+        If endPage > numPages Then
+             MsgBox "Warning: End page (" & endPage & ") exceeds the total pages (" & numPages & "). Adjusting to print up to the last page.", vbExclamation, "Page Range Adjusted"
+             endPage = numPages ' Adjust end page to the maximum valid page
+        End If
+
+        ' --- Adjust page numbers to 0-based index for Adobe SDK ---
+        actualStartPage = startPage - 1
+        actualEndPage = endPage - 1
+
+        ' --- Print the specified page range silently ---
+        ' Parameters for PrintPagesSilent:
+        ' nFirstPage (0-based)
+        ' nLastPage (0-based)
+        ' nPrintLevel (2 = Level 2 PostScript with annotations, common default; 3=PrintAsImage)
+        ' bShrinkToFit (0 = False)
+        ' bBinaryOk (0 = False, use True (1) if printer supports binary PostScript)
+        ' Return value: Non-zero on success, 0 on failure (or throws error)
+        If avDoc.PrintPagesSilent(actualStartPage, actualEndPage, 2, 0, 0) <> 0 Then
+            printSuccess = True ' Method returned success code
+        Else
+            ' Even if it returns 0, sometimes it works but might indicate a minor issue.
+            ' Primarily rely on error handling, but log this potential issue if needed.
+            Debug.Print "PrintPagesSilent returned 0 for file: " & filePath & ". Print may have failed silently."
+            ' Keep printSuccess = False here as a precaution
+        End If
+
+    Else
+        ' Failed to open the document
+        MsgBox "Error: Could not open the PDF file." & vbCrLf & filePath, vbCritical, "File Open Error"
+        ' avDoc.Open failed, avDoc object might still exist but is useless
+        GoTo Cleanup
+    End If
+
+' --- Cleanup: Close document and release objects ---
+Cleanup:
+    On Error Resume Next ' Ignore errors during cleanup itself
+
+    ' Close the document without saving changes
+    If Not avDoc Is Nothing Then
+        avDoc.Close True ' Use True to close silently without prompting
+    End If
+
+    ' Release COM objects
+    Set pdDoc = Nothing
+    Set avDoc = Nothing
+
+    ' Optional: Suggest garbage collection (rarely needed, but can help in loops)
+    ' VBA.Collection.Remove "AcroExch.AVDoc" ' This syntax isn't correct
+    ' Consider Application.StatusBar updates if process is long
+
+    On Error GoTo 0 ' Restore default error handling
+    PrintPdfPageRange = printSuccess ' Return the final status
+    Exit Function ' Normal exit
+
+' --- Error Handler ---
+ErrorHandler:
+    MsgBox "An error occurred during PDF printing:" & vbCrLf & vbCrLf & _
+           "Error Number: " & Err.Number & vbCrLf & _
+           "Description: " & Err.Description & vbCrLf & _
+           "Source: " & Err.Source, vbCritical, "Adobe Automation Error"
+    printSuccess = False ' Ensure function returns False on error
+    Resume Cleanup ' Go to cleanup routine to release any acquired resources
+
+End Function
