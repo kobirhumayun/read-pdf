@@ -49,4 +49,29 @@ Private Function LoadDictionaryFromJsonTextFile(filePath As String) As Object
 
 End Function
 
-
+Function ConvertDictToArrayOfDict(dict As Object) As Variant
+    Dim dictArray() As Object
+    Dim key As Variant
+    Dim i As Long
+    
+    ' Initialize the array with the size of the dictionary
+    ReDim dictArray(0 To dict.Count - 1)
+    
+    ' Iterate through each key in the dictionary
+    i = 0
+    For Each key In dict.keys
+        ' Create a new dictionary for each key-value pair
+        Dim newDict As Object
+        Set newDict = CreateObject("Scripting.Dictionary")
+        
+        ' Add the key-value pair to the new dictionary
+        newDict.Add key, dict(key)
+        
+        ' Assign the new dictionary to the array
+        Set dictArray(i) = newDict
+        i = i + 1
+    Next key
+    
+    ' Return the array of dictionary objects
+    ConvertDictToArrayOfDict = dictArray
+End Function
