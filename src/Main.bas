@@ -131,6 +131,7 @@ Sub PrintB2BLc()
     
     Dim resultDict As Object
     Set resultDict = CreateObject("Scripting.Dictionary")
+    Dim tempDict As Object
 
     Dim dicKey As Variant
     
@@ -138,7 +139,13 @@ Sub PrintB2BLc()
         Dim readPdf As Object
         Set readPdf = Application.Run("readPdf.ExtractTextFromPdfUsingAcrobatAcroHiliteList", b2bPaths(dicKey))
 
-       resultDict.Add resultDict.Count + 1, Application.Run("utils.ExtractAnyBankLc", readPdf)
+        Set tempDict = Application.Run("utils.ExtractAnyBankLc", readPdf)
+
+        If tempDict("bankName") = "Unknown" Then
+            tempDict.Add "lcNo",  b2bPaths(dicKey) ' set file path to inspect
+        End If
+
+       resultDict.Add resultDict.Count + 1, tempDict
 
     Next dicKey
 
