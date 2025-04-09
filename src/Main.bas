@@ -186,6 +186,8 @@ Sub PrintB2BLc()
         Next dicKey
             MsgBox msgStr, ,"List of LC that mismatch with file name"
     End If
+
+    MsgBox "Printing Process Completed"
     
     
 End Sub
