@@ -134,6 +134,8 @@ Sub PrintB2BLc()
     Dim lcNoMismatchWithFileNameDict As Object
     Set lcNoMismatchWithFileNameDict = CreateObject("Scripting.Dictionary")
     Dim tempDict As Object
+    Dim printPageRangeDict As Object
+    Dim printStatus As Boolean
 
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
@@ -156,6 +158,10 @@ Sub PrintB2BLc()
         If tempDict("lcNo") <> fileName Then
             lcNoMismatchWithFileNameDict.Add lcNoMismatchWithFileNameDict.Count + 1, fileName
         End If
+
+        Set printPageRangeDict = Application.Run("utils.GetPageRangeForPrint", tempDict)
+        printStatus = Application.Run("utils.PrintPdfPageRange", b2bPaths(dicKey), printPageRangeDict("startPage"), printPageRangeDict("endPage"))
+        ' MsgBox "start page " & printPageRangeDict("startPage") & "end page " & printPageRangeDict("endPage")
 
        resultDict.Add resultDict.Count + 1, tempDict
 
