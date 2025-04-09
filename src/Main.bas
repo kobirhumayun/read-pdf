@@ -173,6 +173,8 @@ Sub PrintB2BLc()
     Dim ws As Worksheet
     Set ws = ActiveWorkbook.ActiveSheet
 
+    ws.Range("a:a").NumberFormat = "@"
+    
     Dim printB2bInfo As Boolean
     printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, False, False)
 
