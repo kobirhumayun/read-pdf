@@ -131,7 +131,13 @@ Sub PrintB2BLc()
     
     Dim resultDict As Object
     Set resultDict = CreateObject("Scripting.Dictionary")
+    Dim lcNoMismatchWithFileNameDict As Object
+    Set lcNoMismatchWithFileNameDict = CreateObject("Scripting.Dictionary")
     Dim tempDict As Object
+
+    Dim fso As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    Dim fileName As String
 
     Dim dicKey As Variant
     
@@ -143,6 +149,12 @@ Sub PrintB2BLc()
 
         If tempDict("bankName") = "Unknown" Then
             tempDict.Add "lcNo",  b2bPaths(dicKey) ' set file path to inspect
+        End If
+
+        fileName = fso.GetBaseName(b2bPaths(dicKey))
+
+        If tempDict("lcNo") <> fileName Then
+            lcNoMismatchWithFileNameDict.Add lcNoMismatchWithFileNameDict.Count + 1, fileName
         End If
 
        resultDict.Add resultDict.Count + 1, tempDict
@@ -157,6 +169,15 @@ Sub PrintB2BLc()
 
     Dim printB2bInfo As Boolean
     printB2bInfo = Application.Run("utils.PutB2bDataToWs", resultDict, ws, True, 1, 1, False, False)
+
+    Dim msgStr As String
+
+    If lcNoMismatchWithFileNameDict.Count > 0 Then
+        For Each dicKey In lcNoMismatchWithFileNameDict.Keys
+            msgStr = msgStr & Chr(10) & lcNoMismatchWithFileNameDict(1)
+        Next dicKey
+            MsgBox msgStr, ,"List of LC that mismatch with file name"
+    End If
     
     
 End Sub
