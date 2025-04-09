@@ -477,3 +477,52 @@ Function GetTimestampForFilename() As String
     GetTimestampForFilename = Format(Now, "yyyy-mm-dd_hh-nn-ss")
 
 End Function
+
+Private Function GetPageRangeForPrint(extractedLcDict As Object) As Object
+    
+  Dim resultDict As Object
+  Set resultDict = CreateObject("Scripting.Dictionary")
+
+  Dim piArr As Variant
+  piArr = Split(extractedLcDict("pi"), ",")
+
+  Debug.Print (UBound(piArr) + 1)
+
+  Dim bankName As String
+  bankName = extractedLcDict("bankName")
+
+  If bankName = "AlArafah" Then
+
+    resultDict.Add "startPage", 1
+    resultDict.Add "endPage", 3 + (UBound(piArr) + 1)
+      
+  ElseIf bankName = "Brac" Then
+
+    resultDict.Add "startPage", 1
+    resultDict.Add "endPage", 2 + (UBound(piArr) + 1)
+      
+  ElseIf bankName = "City" Then
+
+    resultDict.Add "startPage", 1
+    resultDict.Add "endPage", 4 + (UBound(piArr) + 1)
+      
+  ElseIf bankName = "Mtb" Then
+
+    resultDict.Add "startPage", 1
+    resultDict.Add "endPage", 4 + (UBound(piArr) + 1)
+      
+  ElseIf bankName = "Mtb1" Then
+
+    resultDict.Add "startPage", 1
+    resultDict.Add "endPage", 4 + (UBound(piArr) + 1)
+      
+  ElseIf bankName = "Scb" Then
+
+    resultDict.Add "startPage", 1
+    resultDict.Add "endPage", 3 + (UBound(piArr) + 1)
+      
+  End If
+
+  Set GetPageRangeForPrint = resultDict
+
+End Function
