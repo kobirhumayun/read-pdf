@@ -348,6 +348,8 @@ Private Function ExtractAnyBankLc(readPdf As Object) As Object
       Set resultDict = Application.Run("Scb.ExtractPdfLcScb", readPdf)
   End If
 
+  resultDict.Add "bankName", bankName
+  
   Set ExtractAnyBankLc = resultDict
 
 End Function
