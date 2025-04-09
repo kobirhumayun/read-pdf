@@ -486,8 +486,6 @@ Private Function GetPageRangeForPrint(extractedLcDict As Object) As Object
   Dim piArr As Variant
   piArr = Split(extractedLcDict("pi"), ",")
 
-  Debug.Print (UBound(piArr) + 1)
-
   Dim bankName As String
   bankName = extractedLcDict("bankName")
 
