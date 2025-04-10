@@ -486,38 +486,77 @@ Private Function GetPageRangeForPrint(extractedLcDict As Object) As Object
   Dim piArr As Variant
   piArr = Split(extractedLcDict("pi"), ",")
 
+  Dim startPage As Long
+  Dim endPage As Long
+  Dim textPagesCount As Long
+
+  textPagesCount = extractedLcDict("pdfProperties")("textPagesCount")
+
   Dim bankName As String
   bankName = extractedLcDict("bankName")
 
   If bankName = "AlArafah" Then
 
-    resultDict.Add "startPage", 1
-    resultDict.Add "endPage", 3 + (UBound(piArr) + 1)
+    startPage = 1
+    endPage = 3 + (UBound(piArr) + 1)
+
+    resultDict.Add "startPage", startPage
+    resultDict.Add "endPage", endPage
       
   ElseIf bankName = "Brac" Then
 
-    resultDict.Add "startPage", 1
-    resultDict.Add "endPage", 2 + (UBound(piArr) + 1)
+    startPage = 1
+    endPage = 2 + (UBound(piArr) + 1)
+
+    resultDict.Add "startPage", startPage
+    resultDict.Add "endPage", endPage
       
   ElseIf bankName = "City" Then
 
-    resultDict.Add "startPage", 1
-    resultDict.Add "endPage", 4 + (UBound(piArr) + 1)
+    startPage = 1
+
+    If textPagesCount > 0 And textPagesCount <= 4 Then
+      endPage = textPagesCount + (UBound(piArr) + 1)
+    Else
+      endPage = 4 + (UBound(piArr) + 1)
+    End If
+
+    resultDict.Add "startPage", startPage
+    resultDict.Add "endPage", endPage
       
   ElseIf bankName = "Mtb" Then
 
-    resultDict.Add "startPage", 1
-    resultDict.Add "endPage", 4 + (UBound(piArr) + 1)
+    startPage = 1
+    
+    If textPagesCount > 0 And textPagesCount <= 4 Then
+      endPage = textPagesCount + (UBound(piArr) + 1)
+    Else
+      endPage = 4 + (UBound(piArr) + 1)
+    End If
+
+    resultDict.Add "startPage", startPage
+    resultDict.Add "endPage", endPage
       
   ElseIf bankName = "Mtb1" Then
 
-    resultDict.Add "startPage", 1
-    resultDict.Add "endPage", 4 + (UBound(piArr) + 1)
+    startPage = 1
+    
+    If textPagesCount > 0 And textPagesCount <= 4 Then
+      endPage = textPagesCount + (UBound(piArr) + 1)
+    Else
+      endPage = 4 + (UBound(piArr) + 1)
+    End If
+
+    resultDict.Add "startPage", startPage
+    resultDict.Add "endPage", endPage
       
   ElseIf bankName = "Scb" Then
 
-    resultDict.Add "startPage", 1
-    resultDict.Add "endPage", 3 + (UBound(piArr) + 1)
+    startPage = 1
+    endPage = 3 + (UBound(piArr) + 1)
+
+    resultDict.Add "startPage", startPage
+    resultDict.Add "endPage", endPage
       
   End If
 
