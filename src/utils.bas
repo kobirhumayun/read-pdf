@@ -472,7 +472,7 @@ End Function
 Private Function GetTimestampForFilename() As String
     ' Returns the current date and time formatted as YYYY-MM-DD_HH-MM-SS.
     ' More readable for some, still filename-safe and sortable.
-    ' Example Output: 2025-04-08_10-54-21 (using nn for minutes)
+    ' Example Output: 2026-04-08_10-54-21 (using nn for minutes)
 
     GetTimestampForFilename = Format(Now, "yyyy-mm-dd_hh-nn-ss")
 
