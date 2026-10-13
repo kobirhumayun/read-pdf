@@ -4,7 +4,7 @@ Option Explicit
 Sub BracLc()
 
     Dim b2bPaths As Object
-    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2025", "Select Brac LC Only", "pdf")
+    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2026", "Select Brac LC Only", "pdf")
     
     Dim resultDict As Object
     Set resultDict = Application.Run("Brac.ReadBracLcs", b2bPaths)
@@ -20,7 +20,7 @@ End Sub
 Sub AlArafahLc()
 
     Dim b2bPaths As Object
-    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2025", "Select AlArafah LC Only", "pdf")
+    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2026", "Select AlArafah LC Only", "pdf")
     
     Dim resultDict As Object
     Set resultDict = Application.Run("AlArafah.ReadAlArafahLcs", b2bPaths)
@@ -36,7 +36,7 @@ End Sub
 Sub CityLc()
 
     Dim b2bPaths As Object
-    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2025", "Select City LC Only", "pdf")
+    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2026", "Select City LC Only", "pdf")
     
     Dim resultDict As Object
     Set resultDict = Application.Run("City.ReadCityLcs", b2bPaths)
@@ -52,7 +52,7 @@ End Sub
 Sub MtbLc()
 
     Dim b2bPaths As Object
-    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2025", "Select Mtb LC Only", "pdf")
+    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2026", "Select Mtb LC Only", "pdf")
     
     Dim resultDict As Object
     Set resultDict = Application.Run("Mtb.ReadMtbLcs", b2bPaths)
@@ -68,7 +68,7 @@ End Sub
 Sub Mtb1Lc()
 
     Dim b2bPaths As Object
-    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2025", "Select Mtb1 LC Only", "pdf")
+    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2026", "Select Mtb1 LC Only", "pdf")
     
     Dim resultDict As Object
     Set resultDict = Application.Run("Mtb1.ReadMtb1Lcs", b2bPaths)
@@ -84,7 +84,7 @@ End Sub
 Sub ScbLc()
 
     Dim b2bPaths As Object
-    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2025", "Select Scb LC Only", "pdf")
+    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2026", "Select Scb LC Only", "pdf")
     
     Dim resultDict As Object
     Set resultDict = Application.Run("Scb.ReadScbLcs", b2bPaths)
@@ -100,7 +100,7 @@ End Sub
 Sub AnyBankLc()
 
     Dim b2bPaths As Object
-    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2025", "Select any bank LC", "pdf")
+    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2026", "Select any bank LC", "pdf")
     
     Dim resultDict As Object
     Set resultDict = CreateObject("Scripting.Dictionary")
@@ -127,7 +127,7 @@ End Sub
 Sub PrintB2BLc()
 
     Dim b2bPaths As Object
-    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2025", "Select any bank LC", "pdf")
+    Set b2bPaths = Application.Run("utils.GetSelectedFilePaths", "G:\PDL Customs\Export LC, Import LC & UP\Import LC With Related Doc\YEAR-2026", "Select any bank LC", "pdf")
     
     Dim resultDict As Object
     Set resultDict = CreateObject("Scripting.Dictionary")
@@ -167,7 +167,7 @@ Sub PrintB2BLc()
 
     Next dicKey
 
-    Application.Run "JsonUtilityFunction.SaveDictionaryToJsonTextFile", resultDict, "D:\Temp\UP Draft\Draft 2025\b2b-print-data\" & _
+    Application.Run "JsonUtilityFunction.SaveDictionaryToJsonTextFile", resultDict, "D:\Temp\UP Draft\Draft 2026\b2b-print-data\" & _
        "printed-b2b-" & Application.Run("utils.GetTimestampForFilename") & ".json"
 
     Dim ws As Worksheet
